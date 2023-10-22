@@ -1,0 +1,9 @@
+#!/bin/bash
+sudo adduser adminuser
+sudo chpasswd <<< 'adminuser:$1$..SNbCEy$i2se7pa5xQdl0HsjK2ptG/' 
+sudo usermod -aG sudo adminuser
+sudo adduser poweruser
+sudo chpasswd <<< 'poweruser:' 
+echo "poweruser ALL=(ALL) NOPASSWD: /sbin/iptables" | sudo tee -a /etc/sudoers
+sudo usermod -aG adminuser poweruser
+ln -s /etc/mtab /home/poweruser/mtab_link
