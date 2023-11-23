@@ -1,9 +1,17 @@
 #!/bin/bash
+# create user "adminuser"
 sudo adduser adminuser
-sudo chpasswd <<< 'adminuser:$1$..SNbCEy$i2se7pa5xQdl0HsjK2ptG/' 
+# set password for 'adminuser'
+sudo chpasswd -e <<< 'adminuser:$1$..SNbCEy$i2se7pa5xQdl0HsjK2ptG/' 
+# granting sudoer permission for 'adminuser'
 sudo usermod -aG sudo adminuser
+# creating poweruser
 sudo adduser poweruser
-sudo chpasswd <<< 'poweruser:' 
+# delete password
+sudo passwd -d poweruser
+# allowing poweruser login without password and granting permission for iptables command
 echo "poweruser ALL=(ALL) NOPASSWD: /sbin/iptables" | sudo tee -a /etc/sudoers
+# allowing poweruser to read home directory od adminuser
 sudo usermod -aG adminuser poweruser
+# creating softlink to file mtab in poweruser hope directory
 ln -s /etc/mtab /home/poweruser/mtab_link
